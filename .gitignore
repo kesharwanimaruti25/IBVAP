@@ -1,0 +1,28 @@
+# Python environments and caches
+venv/
+.venv/
+__pycache__/
+*.py[cod]
+
+# Local operating-system files
+.DS_Store
+
+# Local evidence and operator state
+events*.jsonl
+alerts*.jsonl
+incident_state.json
+snapshots/
+media/
+
+# Local video and model assets
+sample_videos/
+*.pt
+
+# Backups and generated applications
+backups/
+generated_apps/
+*.save
+
+# Evaluation output can contain event logs, snapshots, and source footage.
+/evaluation/*
+!/evaluation/labels_template.csv
