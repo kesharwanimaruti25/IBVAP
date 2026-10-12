@@ -4,7 +4,7 @@ import os
 import tempfile
 import unittest
 
-from evaluate_events import evaluate, load_labels, load_predictions
+from evaluate_events import evaluate, load_labels, load_predictions, main
 
 
 class EvaluateEventsTests(unittest.TestCase):
@@ -26,6 +26,86 @@ class EvaluateEventsTests(unittest.TestCase):
         self.assertEqual(result["overall"]["true_positives"], 2)
         self.assertEqual(result["overall"]["false_positives"], 1)
         self.assertEqual(result["overall"]["false_negatives"], 0)
+        self.assertEqual(len(result["matches"]), 2)
+        self.assertEqual(len(result["false_positives"]), 1)
+        self.assertEqual(result["false_negatives"], [])
+        self.assertAlmostEqual(result["matches"][0]["time_error_seconds"], 0.5)
+        self.assertEqual(result["by_video"]["clip.mp4"]["false_positives"], 1)
+        self.assertEqual(result["by_video"]["clip.mp4"]["false_negatives"], 0)
+
+    def test_json_report_records_source_digests_and_event_level_errors(self):
+        with tempfile.TemporaryDirectory() as root:
+            labels_path = os.path.join(root, "labels.csv")
+            events_path = os.path.join(root, "events.jsonl")
+            report_path = os.path.join(root, "report.json")
+            with open(labels_path, "w", newline="", encoding="utf-8") as file:
+                writer = csv.writer(file)
+                writer.writerow(["video", "event_type", "time_seconds", "direction", "event_class"])
+                writer.writerow(["clip.mp4", "crossing", "10", "entering", "Person"])
+                writer.writerow(["clip.mp4", "crossing", "20", "exiting", "Person"])
+            with open(events_path, "w", encoding="utf-8") as file:
+                file.write(json.dumps({
+                    "source": "clip.mp4",
+                    "type": "crossing",
+                    "media_time_seconds": 10.5,
+                    "direction": "entering",
+                    "class": "Person",
+                }) + "\n")
+                file.write(json.dumps({
+                    "source": "clip.mp4",
+                    "type": "crossing",
+                    "media_time_seconds": 30,
+                    "direction": "entering",
+                    "class": "Person",
+                }) + "\n")
+
+            exit_code = main([
+                "--labels", labels_path,
+                "--events", events_path,
+                "--tolerance", "1",
+                "--json-report", report_path,
+            ])
+
+            with open(report_path, encoding="utf-8") as file:
+                report = json.load(file)
+
+        self.assertEqual(exit_code, 0)
+        self.assertEqual(report["schema_version"], 1)
+        self.assertEqual(report["method"]["matching"], "one-to-one")
+        self.assertEqual(report["method"]["tolerance_seconds"], 1.0)
+        self.assertEqual(len(report["method"]["labels_sha256"]), 64)
+        self.assertEqual(len(report["method"]["events_sha256"]), 64)
+        self.assertEqual(len(report["method"]["evaluator_sha256"]), 64)
+        self.assertEqual(report["overall"]["true_positives"], 1)
+        self.assertEqual(report["overall"]["false_positives"], 1)
+        self.assertEqual(report["overall"]["false_negatives"], 1)
+        self.assertEqual(report["by_video"]["clip.mp4"]["f1"], 0.5)
+        self.assertEqual(report["matches"][0]["label"]["time_seconds"], 10.0)
+        self.assertEqual(report["false_negatives"][0]["time_seconds"], 20.0)
+        self.assertEqual(report["false_positives"][0]["time_seconds"], 30.0)
+
+    def test_json_report_cannot_overwrite_an_input(self):
+        with tempfile.TemporaryDirectory() as root:
+            labels_path = os.path.join(root, "labels.csv")
+            events_path = os.path.join(root, "events.jsonl")
+            with open(labels_path, "w", newline="", encoding="utf-8") as file:
+                writer = csv.writer(file)
+                writer.writerow(["video", "event_type", "time_seconds"])
+                writer.writerow(["clip.mp4", "crossing", "10"])
+            with open(events_path, "w", encoding="utf-8") as file:
+                file.write("{}\n")
+
+            exit_code = main([
+                "--labels", labels_path,
+                "--events", events_path,
+                "--json-report", events_path,
+            ])
+
+            with open(events_path, encoding="utf-8") as file:
+                input_contents = file.read()
+
+        self.assertEqual(exit_code, 2)
+        self.assertEqual(input_contents, "{}\n")
 
     def test_requires_matching_video_type_and_optional_direction(self):
         predictions = [

@@ -1,5 +1,7 @@
 # IBVAP — Intelligent Video Analytics Platform
 
+[![Tests](https://github.com/kesharwanimaruti25/IBVAP/actions/workflows/tests.yml/badge.svg)](https://github.com/kesharwanimaruti25/IBVAP/actions/workflows/tests.yml)
+
 **An evidence-led, local-first video analytics prototype.** IBVAP processes video on-device, records detector events with a hash chain, and provides a dashboard for reviewing snapshots and asking a local Ollama model about recent alert records.
 
 > Detector alerts are observations for human review. They are not proof of intent, identity, or wrongdoing.
@@ -109,9 +111,21 @@ After manually labeling that exact clip, save the rows in `evaluation/run-01/lab
 python evaluate_events.py --labels evaluation/run-01/labels.csv --events evaluation/run-01/events.jsonl --tolerance 2
 ```
 
-The evaluator reports one-to-one event-level precision, recall, and F1 overall and per type, plus false positives and misses. Optional direction and event-class labels must match; leave them blank to ignore those fields. The tolerance is the allowed difference in video-relative seconds. This is not frame-level accuracy, and it is only meaningful when the labels cover the evaluated clips. Existing historical records without video timing metadata are excluded and counted as unscorable; they are not silently matched using wall-clock timestamps.
+The evaluator reports one-to-one event-level precision, recall, and F1 overall, per event type, and per video, plus false positives and misses. Optional direction and event-class labels must match; leave them blank to ignore those fields. The tolerance is the allowed difference in video-relative seconds. This is not frame-level accuracy, and it is only meaningful when the labels cover the evaluated clips. Existing historical records without video timing metadata are excluded and counted as unscorable; they are not silently matched using wall-clock timestamps.
 
-Run the automated tests with `python -m unittest discover -s tests -v`.
+For a reviewable evaluation artifact, add `--json-report`:
+
+```bash
+python evaluate_events.py \
+  --labels evaluation/run-01/labels.csv \
+  --events evaluation/run-01/events.jsonl \
+  --tolerance 2 \
+  --json-report evaluation/run-01/report.json
+```
+
+The JSON report records the matching method and tolerance, SHA-256 digests of the input label and event files and evaluator, metrics overall/per type/per video, every one-to-one match with its time error, and the unmatched labels and detections. Keep labels authorized, document which clips and camera conditions they cover, and review every miss and false alert. A report makes a run auditable; it does not establish that the selected clips represent real deployments or record all model/hardware configuration.
+
+Run the automated tests with `python -m unittest discover -s tests -v`. A lightweight test-only install is available with `python -m pip install -r requirements-test.txt`; GitHub Actions runs this suite on pushes and pull requests.
 
 ## Pitch/demo outline
 
