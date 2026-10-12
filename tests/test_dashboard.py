@@ -246,10 +246,19 @@ class DashboardApiTests(unittest.TestCase):
 
     def test_dashboard_is_the_default_page_and_keeps_incidents_alias(self):
         response = self.client.get("/")
+        page = response.get_data(as_text=True)
 
         self.assertEqual(response.status_code, 200)
-        self.assertIn("Incident timeline", response.get_data(as_text=True))
-        self.assertNotIn("Video studio", response.get_data(as_text=True))
+        self.assertIn("Incident timeline", page)
+        self.assertNotIn("Video studio", page)
+        self.assertIn("JUDGE DEMO FLOW", page)
+        self.assertIn("AUTO-REFRESH · 5S", page)
+        self.assertIn("real event records only", page)
+        self.assertIn("prefers-contrast: more", page)
+        self.assertIn("focusIsOutsideDialog", page)
+        self.assertIn("python detector.py", page)
+        self.assertIn("event-thumb", page)
+        self.assertIn("model score", page)
         self.assertIn("Incident timeline", self.client.get("/incidents").get_data(as_text=True))
 
     def test_video_studio_endpoints_are_removed(self):

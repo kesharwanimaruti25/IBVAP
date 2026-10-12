@@ -57,10 +57,14 @@ During interactive detection, click a visible person box to mark or unmark that 
 - Persistent per-event operator notes and reviewed/open state
 - CSV export using the currently selected filters
 - On-demand hash-chain and snapshot verification
+- Evidence thumbnails directly in the incident queue, with grouped snapshots in the detail view
+- Clear local service/sync status, a truthful zero-state, and a three-step judge-demo guide (no fabricated events)
 - Local-model summaries and Q&A with explicit unavailable/error states
-- Responsive, warm field-operations dashboard with clearer status, review, and evidence hierarchy
+- Responsive command-center dashboard with keyboard-accessible controls and a clear review/evidence hierarchy
 - Detector video-end controls and tracking labels sized to stay readable within the video frame
 - Video source and media-relative event time on new detector records
+
+Detector scores are model outputs, not calibrated probabilities. The dashboard labels them as model scores and keeps them for human review; it does not claim that a score proves intent or identity.
 
 ## Configuration
 
@@ -111,9 +115,9 @@ Run the automated tests with `python -m unittest discover -s tests -v`.
 
 ## Pitch/demo outline
 
-1. Show the local-service status and the no-cloud processing statement.
+1. Show the local-service status, the auto-refresh timestamp, and the no-cloud processing statement.
 2. Run a prepared, authorized sample video and trigger a visible event.
-3. Open the event evidence and point out the recorded class, timestamp, confidence, and hashes.
+3. Open the event evidence and point out the recorded class, timestamp, model score, and hashes.
 4. Ask a question answerable from the recent alert records; show the local-model status.
 5. Add an operator note, mark the event reviewed, filter to reviewed items, and export CSV.
 6. Run integrity verification. For a tamper demonstration, use a disposable copy of the event log and snapshots—never alter the working evidence.

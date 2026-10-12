@@ -520,17 +520,242 @@ HTML = r"""
       .modal-card { max-height: 94vh; border-radius: 11px; }
       .modal-info { padding: 17px; }
     }
+    :root {
+      color-scheme: dark;
+      --bg: #081216; --paper: #101d22; --paper-raised: #14242a; --line: #263a40;
+      --text: #edf5ef; --muted: #a2b5af; --blue: #79c6dd; --cyan: #9edcbb;
+      --amber: #f0bb68; --red: #ff947d; --green: #b8ed83; --quiet: #728982;
+    }
+    body {
+      min-height: 100vh;
+      color: var(--text);
+      background:
+        radial-gradient(ellipse at 82% 1%, #12312c 0, transparent 31rem),
+        radial-gradient(ellipse at 8% 40%, #0e2227 0, transparent 38rem),
+        var(--bg);
+    }
+    .shell { max-width: 1600px; padding-top: 22px; }
+    .topbar { border-color: #263a40; }
+    .brand-mark {
+      border: 1px solid #81a991;
+      color: #0a1715;
+      background: linear-gradient(145deg, #c4f087, #82c9a4);
+      box-shadow: 0 0 30px #a9e78b20;
+    }
+    .eyebrow { color: #abd990; }
+    .privacy-pill {
+      color: #c9f3a3;
+      border-color: #42644c;
+      background: #162820;
+    }
+    .dot.ok { background: var(--green); box-shadow: 0 0 10px #b8ed8360; }
+    .dot.warn { background: var(--amber); }
+    .hero {
+      min-height: 220px;
+      margin: 24px 0 18px;
+      padding: 30px 34px;
+      border: 1px solid #31534b;
+      border-radius: 16px;
+      color: var(--text);
+      background:
+        linear-gradient(110deg, #102820 0%, #102b2c 56%, #10242b 100%);
+      box-shadow: 0 18px 55px #00000020, inset 0 1px #ffffff08;
+    }
+    .hero::before {
+      position: absolute;
+      inset: 0;
+      background-image: linear-gradient(#c4edc208 1px, transparent 1px), linear-gradient(90deg, #c4edc208 1px, transparent 1px);
+      background-size: 34px 34px;
+      mask-image: linear-gradient(90deg, transparent 20%, #000 100%);
+      content: "";
+      pointer-events: none;
+    }
+    .hero::after {
+      top: -116px;
+      right: 14%;
+      width: 320px;
+      height: 320px;
+      border-color: #b9ee8b16;
+      box-shadow: 0 0 0 28px #b9ee8b09, 0 0 0 58px #b9ee8b07, 0 0 0 88px #b9ee8b05;
+    }
+    .hero .eyebrow { color: #bfe78f; }
+    .hero h2 { color: #f0f7ef; }
+    .hero p { color: #b3c9c0; }
+    .hero-note {
+      border-color: #ffffff18;
+      border-left-color: #c1ed84;
+      border-radius: 0 10px 10px 0;
+      color: #c0d2c8;
+      background: #06130f50;
+    }
+    .demo-path {
+      display: grid;
+      grid-template-columns: 135px repeat(3, minmax(0, 1fr));
+      align-items: center;
+      gap: 12px;
+      margin: 0 0 17px;
+      padding: 12px 15px;
+      border: 1px solid #263c40;
+      border-radius: 12px;
+      background: linear-gradient(105deg, #102025, #101b20);
+    }
+    .demo-path-label { color: #c1ed84; font-size: 9px; font-weight: 760; letter-spacing: .14em; }
+    .demo-path-label span { display: block; margin-top: 3px; color: var(--quiet); font-size: 8px; letter-spacing: .09em; }
+    .demo-step { display: flex; align-items: center; gap: 9px; min-width: 0; color: #dce9e1; font-size: 10px; }
+    .demo-step > span { display: grid; place-items: center; width: 23px; height: 23px; flex: 0 0 23px; border: 1px solid #48664e; border-radius: 50%; color: #c1ed84; font-size: 9px; font-weight: 700; }
+    .demo-step-copy { min-width: 0; }
+    .demo-step strong { display: block; font-size: 10px; font-weight: 650; }
+    .demo-step code { color: #9bb2aa; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 9px; }
+    .metrics { gap: 10px; }
+    .metric, .panel {
+      border: 1px solid #263a40;
+      border-radius: 12px;
+      background: linear-gradient(145deg, #132228, #101b20);
+      box-shadow: 0 8px 24px #00000016, inset 0 1px #ffffff05;
+    }
+    .metric { min-height: 108px; padding: 16px 18px; }
+    .metric::before { width: 3px; background: #8dd7c4; }
+    .metric:nth-child(2)::before { background: #8acde0; }
+    .metric:nth-child(3)::before { background: #f0bb68; }
+    .metric:nth-child(4)::before { background: #bda9ef; }
+    .metric-label { color: #9cb2aa; }
+    .metric-value { color: #f0f7ef; }
+    .metric-hint { color: #80968e; }
+    .main-grid { grid-template-columns: minmax(0, 1fr) 330px; }
+    .panel { padding: 18px; }
+    .panel-title { color: #edf5ef; }
+    .panel-subtitle { color: #91a69e; }
+    .live { color: #c1ed84; }
+    input, select, textarea {
+      border-color: #30464b;
+      color: #e8f1eb;
+      background: #0d191e;
+    }
+    input::placeholder, textarea::placeholder { color: #748a83; }
+    input:focus-visible, select:focus-visible, textarea:focus-visible {
+      border-color: #a7df7a;
+      outline-color: #a7df7a55;
+    }
+    .btn, .icon-btn {
+      border-color: #34494d;
+      color: #dce9e1;
+      background: #17272c;
+    }
+    .btn:hover, .icon-btn:hover { border-color: #55726a; background: #1b3034; }
+    .btn:focus-visible, .icon-btn:focus-visible { outline-color: #b8ed83; }
+    .btn.primary { border-color: #a9d881; color: #0b1713; background: #b8ed83; }
+    .btn.primary:hover { border-color: #c9f29b; background: #c9f29b; }
+    .btn.ghost { color: #a9bbb4; }
+    .list-meta { color: #91a69e; }
+    .event-list { gap: 9px; }
+    .event {
+      grid-template-columns: 3px 112px minmax(0, 1fr) auto;
+      gap: 12px;
+      padding: 10px;
+      border-color: #2b3f44;
+      border-radius: 10px;
+      background: #122126;
+    }
+    .event:hover { border-color: #577568; background: #16282d; box-shadow: 0 9px 22px #00000022; }
+    .event-thumb {
+      position: relative;
+      display: grid;
+      place-items: center;
+      min-height: 76px;
+      overflow: hidden;
+      border: 1px solid #2b4044;
+      border-radius: 7px;
+      color: #79918a;
+      background: radial-gradient(circle at 50% 45%, #25423e, #101a1e 70%);
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: .1em;
+    }
+    .event-thumb::after {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 55%, #0610127a);
+      content: "";
+      pointer-events: none;
+    }
+    .event-thumb img { width: 100%; height: 100%; min-height: 76px; object-fit: cover; }
+    .event-type { color: #edf5ef; }
+    .tag { border-color: #30464a; color: #b3c7bf; background: #19292e; }
+    .tag.alert { color: #ffc0ae; border-color: #70493e; background: #37231f; }
+    .tag.good { color: #caf19e; border-color: #456344; background: #1b3022; }
+    .event-summary { color: #c3d2cb; }
+    .event-meta { color: #8fa59c; }
+    .empty {
+      padding: 30px 20px;
+      border-color: #3a5352;
+      border-radius: 10px;
+      color: #a7bab2;
+      background: #101e23;
+      text-align: left;
+    }
+    .empty-state-title { display: block; margin-bottom: 5px; color: #e8f2eb; font-size: 14px; font-weight: 680; }
+    .empty-state-copy { max-width: 520px; margin: 0; color: #9bb0a8; font-size: 11px; line-height: 1.7; }
+    .empty-state-command { display: inline-block; margin-top: 12px; padding: 8px 10px; border: 1px solid #385347; border-radius: 6px; color: #c7ef9c; background: #14271f; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; }
+    .empty-state-command button { margin-left: 10px; border: 0; color: #e3f4d2; background: transparent; font: inherit; cursor: pointer; }
+    .empty-state-command button:hover { text-decoration: underline; }
+    .health-row { color: #d6e3dc; }
+    .health-value { color: #a1b4ac; }
+    .assistant-label { color: #a1b4ac; }
+    .assistant-answer { border-color: #33494c; color: #d6e3dc; background: #14242a; }
+    .assistant-foot, .privacy-note, footer { color: #91a69e; }
+    .divider { background: #2a3d42; }
+    .modal { background: #030b0de6; }
+    .modal-card { border-color: #33494c; background: #101d22; box-shadow: 0 28px 90px #00000080; }
+    .modal-image { background: #061013; }
+    .evidence-gallery { border-color: #293d42; background: #101d22; }
+    .evidence-gallery[hidden] { display: none; }
+    .snapshot-empty { display: grid; gap: 6px; max-width: 300px; padding: 20px; color: #a3b7ae; text-align: center; }
+    .snapshot-empty[hidden] { display: none; }
+    .snapshot-empty strong { color: #dce9e1; font-size: 13px; }
+    .snapshot-empty span { font-size: 10px; line-height: 1.6; }
+    .evidence-item { border-color: #33494c; color: #dce9e1; background: #14242a; }
+    .evidence-item.selected { border-color: #b8ed83; outline-color: #b8ed83; }
+    .evidence-item span, .detail-cell small { color: #9aafa7; }
+    .detail-cell { border-color: #304449; background: #15252a; }
+    .detail-cell strong { color: #e5eee8; }
+    .integrity-result { color: #a1b4ac; }
+    @media (max-width: 1000px) {
+      .demo-path { grid-template-columns: 110px repeat(3, minmax(0, 1fr)); gap: 8px; }
+      .main-grid { grid-template-columns: minmax(0, 1fr); }
+    }
+    @media (max-width: 650px) {
+      .shell { padding: 13px 12px 28px; }
+      .hero { min-height: 0; padding: 22px 18px; }
+      .hero-note { max-width: none; }
+      .demo-path { grid-template-columns: 1fr; gap: 10px; }
+      .demo-path-label span { display: inline; margin-left: 6px; }
+      .main-grid { grid-template-columns: minmax(0, 1fr); }
+      .demo-step { padding-top: 2px; }
+      .event { grid-template-columns: 3px 78px minmax(0, 1fr); gap: 9px; padding: 9px; }
+      .event-thumb, .event-thumb img { min-height: 68px; }
+      .event-actions { grid-column: 3; justify-content: flex-end; }
+    }
+    @media (prefers-contrast: more) {
+      :root { --line: #58736d; --muted: #c4d3cd; --quiet: #aebfb7; }
+      .panel, .metric, .event, input, select, textarea, .btn, .icon-btn { border-width: 2px; }
+    }
   </style>
 </head>
 <body>
 <div class="shell">
   <header class="topbar">
-    <div class="brand">    <div class="brand-mark">I</div><div><div class="eyebrow">IBVAP / FIELD OPERATIONS</div><h1>Incident desk</h1></div></div>
+    <div class="brand"><div class="brand-mark">I</div><div><div class="eyebrow">IBVAP / LOCAL OPERATIONS</div><h1>Incident desk</h1></div></div>
     <div class="top-actions"><span class="privacy-pill"><span class="dot ok"></span>LOCAL-FIRST · NO CLOUD AI</span><button id="refreshBtn" class="btn ghost" type="button">Refresh data</button></div>
   </header>
   <section class="hero">
-    <div><div class="eyebrow">OPERATIONS / EVENT REVIEW</div><h2>Monitor the boundary.</h2><p>Review recorded movement, inspect its supporting evidence, and keep an auditable operator history—all on this device.</p></div>
+    <div><div class="eyebrow">LOCAL VIDEO ANALYTICS · HUMAN REVIEW</div><h2>See the signal.<br>Review the evidence.</h2><p>Turn video observations into a clear review queue, with snapshots and a verifiable event history on this device.</p></div>
     <div class="hero-note">Computer vision flags observations. Alerts are not proof of intent or wrongdoing.</div>
+  </section>
+  <section class="demo-path" aria-label="Three-step demonstration guide">
+    <div class="demo-path-label">JUDGE DEMO FLOW<span>REAL EVENTS · NO MOCK DATA</span></div>
+    <div class="demo-step"><span>01</span><div class="demo-step-copy"><strong>Start the detector</strong><code>python detector.py</code></div></div>
+    <div class="demo-step"><span>02</span><div class="demo-step-copy"><strong>Set a virtual fence</strong><code>Draw · confirm · review</code></div></div>
+    <div class="demo-step"><span>03</span><div class="demo-step-copy"><strong>Inspect &amp; verify</strong><code>Snapshot · event integrity</code></div></div>
   </section>
   <section class="metrics" aria-label="Filtered event metrics">
     <article class="metric"><div class="metric-label">VISIBLE EVENTS</div><div class="metric-value" id="totalMetric">—</div><div class="metric-hint">Matches current filters</div></article>
@@ -540,7 +765,7 @@ HTML = r"""
   </section>
   <div class="main-grid">
     <main class="panel">
-      <div class="panel-head"><div><h2 class="panel-title">Incident timeline</h2><p class="panel-subtitle">Newest records first · operator review required</p></div><span class="live"><span class="dot ok"></span> LIVE UPDATES</span></div>
+      <div class="panel-head"><div><h2 class="panel-title">Incident timeline</h2><p class="panel-subtitle">Grouped observations · operator review required</p></div><span class="live" id="syncStatus"><span class="dot ok"></span> AUTO-REFRESH · 5S</span></div>
       <div class="toolbar">
         <input id="searchFilter" class="search" type="search" placeholder="Search summary, class, track…" aria-label="Search incidents">
         <select id="typeFilter" aria-label="Filter by event type"><option value="">All event types</option><option value="crossing">Crossings</option><option value="loitering">Loitering</option><option value="suspicious_running">Suspicious running</option><option value="suspicious_converging">Suspicious converging</option></select>
@@ -550,7 +775,7 @@ HTML = r"""
         <button id="clearBtn" class="btn" type="button">Clear</button>
         <button id="exportBtn" class="btn" type="button">Export CSV</button>
       </div>
-      <div class="list-meta"><span id="resultCount">Loading event records…</span><span>Data stays on this device</span></div>
+      <div class="list-meta"><span id="resultCount">Loading event records…</span><span id="lastUpdated">Waiting for first sync</span></div>
       <div id="eventList" class="event-list" aria-live="polite"></div>
     </main>
     <aside class="side-stack">
@@ -578,7 +803,7 @@ HTML = r"""
   <footer><span>IBVAP · Intelligent Border Video Analytics Platform</span><span>Decision support only · Review evidence before acting</span></footer>
 </div>
 <div id="incidentModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-  <div class="modal-card"><div class="modal-image"><img id="modalSnapshot" alt="Event evidence snapshot"></div><section class="modal-info">
+  <div class="modal-card"><div class="modal-image"><img id="modalSnapshot" alt="Event evidence snapshot"><div id="snapshotUnavailable" class="snapshot-empty" role="status" hidden><strong>No snapshot recorded</strong><span>This observation does not have an attached image.</span></div></div><section class="modal-info">
     <button id="modalClose" class="icon-btn modal-close" type="button">Close</button><h3 id="modalTitle">Incident details</h3>
     <div id="modalSummary" class="event-summary"></div><div id="detailGrid" class="detail-grid"></div>
     <label class="assistant-label" for="operatorNote">Operator note</label><textarea id="operatorNote" rows="3" maxlength="1000" placeholder="Add a review note…"></textarea>
@@ -591,8 +816,16 @@ HTML = r"""
   let alerts = [];
   let selectedIncident = null;
   let returnFocus = null;
+  let pollingAlerts = false;
   const escapeFilename = value => encodeURIComponent(value || '');
   const labelFor = value => (value || 'event').replace(/^suspicious_/, '').replaceAll('_', ' ');
+  const hasActiveFilters = () => (
+    document.getElementById('searchFilter').value.trim() ||
+    document.getElementById('typeFilter').value ||
+    document.getElementById('resolutionFilter').value !== 'all' ||
+    document.getElementById('fromFilter').value ||
+    document.getElementById('toFilter').value
+  );
 
   function queryString() {
     const params = new URLSearchParams();
@@ -621,7 +854,27 @@ HTML = r"""
     document.getElementById('suspiciousMetric').textContent = items.filter(a => String(a.type || '').startsWith('suspicious_')).length;
     document.getElementById('nightMetric').textContent = items.filter(a => a.night === true).length;
     if (!items.length) {
-      addText(list, 'div', 'empty', 'No records match these filters. New events appear here when the detector appends to its event log.');
+      const empty = addText(list, 'div', 'empty', '');
+      if (hasActiveFilters()) {
+        addText(empty, 'strong', 'empty-state-title', 'No incidents match these filters');
+        addText(empty, 'p', 'empty-state-copy', 'Clear a filter or widen the date range to see more of the available review queue.');
+        return;
+      }
+      addText(empty, 'strong', 'empty-state-title', 'Your review queue is clear');
+      addText(empty, 'p', 'empty-state-copy', 'There are no reviewable incidents in the current event history. Start the local detector in another terminal, draw a virtual fence, and qualifying events will appear here automatically. This dashboard shows real event records only—no sample incidents are fabricated.');
+      const command = addText(empty, 'div', 'empty-state-command', '');
+      addText(command, 'code', '', 'python detector.py');
+      const copyButton = addText(command, 'button', '', 'Copy command');
+      copyButton.type = 'button';
+      copyButton.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText('python detector.py');
+          copyButton.textContent = 'Copied';
+        } catch (error) {
+          copyButton.textContent = 'Copy unavailable';
+          copyButton.title = 'Open a terminal in the project folder and run: python detector.py';
+        }
+      });
       return;
     }
     for (const alert of items) {
@@ -631,6 +884,18 @@ HTML = r"""
       const bar = document.createElement('div');
       bar.className = `event-bar ${eventType.startsWith('suspicious_') ? 'suspicious' : eventType === 'loitering' ? 'loitering' : ''}`;
       card.appendChild(bar);
+      const thumbnailFrame = addText(card, 'div', 'event-thumb', alert.snapshot ? '' : 'NO SNAPSHOT');
+      if (alert.snapshot) {
+        const thumbnail = document.createElement('img');
+        thumbnail.src = `/snapshots/${escapeFilename(alert.snapshot)}`;
+        thumbnail.alt = `Evidence snapshot for ${labelFor(eventType)}`;
+        thumbnail.loading = 'lazy';
+        thumbnail.addEventListener('error', () => {
+          thumbnail.remove();
+          thumbnailFrame.textContent = 'SNAPSHOT UNAVAILABLE';
+        }, {once: true});
+        thumbnailFrame.appendChild(thumbnail);
+      }
       const main = document.createElement('div');
       main.className = 'event-main';
       const topline = document.createElement('div');
@@ -648,8 +913,8 @@ HTML = r"""
       addText(meta, 'span', '', `Track #${alert.track_id ?? '—'}`);
       if (alert.source) addText(meta, 'span', '', alert.source);
       if (Number.isFinite(Number(alert.media_time_seconds))) addText(meta, 'span', '', `Video ${Number(alert.media_time_seconds).toFixed(1)}s`);
-      if (Number.isFinite(Number(alert.confidence))) addText(meta, 'span', '', `${Math.round(Number(alert.confidence) * 100)}% confidence`);
-      if (alert.observation_count > 1) addText(meta, 'span', '', `${alert.observation_count} observations · best confidence`);
+      if (Number.isFinite(Number(alert.confidence))) addText(meta, 'span', '', `${Math.round(Number(alert.confidence) * 100)}% model score`);
+      if (alert.observation_count > 1) addText(meta, 'span', '', `${alert.observation_count} observations · highest model score`);
       if (alert.summary_source === 'detector-record') addText(meta, 'span', '', 'AI summary unavailable');
       main.appendChild(meta);
       card.appendChild(main);
@@ -667,15 +932,23 @@ HTML = r"""
   }
 
   async function pollAlerts() {
+    if (pollingAlerts) return;
+    pollingAlerts = true;
     try {
       const response = await fetch(`/api/alerts?${queryString()}`);
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || 'Unable to load incidents.');
       renderAlerts(data.alerts);
+      document.getElementById('lastUpdated').textContent = `Updated ${new Date().toLocaleTimeString()}`;
+      document.getElementById('syncStatus').querySelector('.dot').className = 'dot ok';
     } catch (error) {
       list.replaceChildren();
       addText(list, 'div', 'empty', `Unable to load event records: ${error.message}`);
       document.getElementById('resultCount').textContent = 'Dashboard data unavailable';
+      document.getElementById('lastUpdated').textContent = 'Could not sync';
+      document.getElementById('syncStatus').querySelector('.dot').className = 'dot warn';
+    } finally {
+      pollingAlerts = false;
     }
   }
 
@@ -720,13 +993,28 @@ HTML = r"""
     document.getElementById('noteStatus').textContent = alert.operator_state?.resolved ? 'This incident is marked reviewed.' : '';
     document.getElementById('resolveBtn').textContent = alert.operator_state?.resolved ? 'Reopen review' : 'Mark reviewed';
     const image = document.getElementById('modalSnapshot');
+    const snapshotUnavailable = document.getElementById('snapshotUnavailable');
+    image.onload = () => {
+      image.style.display = 'block';
+      snapshotUnavailable.hidden = true;
+    };
+    image.onerror = () => {
+      image.style.display = 'none';
+      snapshotUnavailable.hidden = false;
+      snapshotUnavailable.querySelector('strong').textContent = 'Snapshot could not be loaded';
+      snapshotUnavailable.querySelector('span').textContent = 'Check that the evidence image still exists in the configured snapshot folder.';
+    };
     if (alert.snapshot) {
       image.src = `/snapshots/${escapeFilename(alert.snapshot)}`;
       image.alt = `Evidence snapshot for ${labelFor(alert.type)} at ${alert.timestamp}`;
       image.style.display = 'block';
+      snapshotUnavailable.hidden = true;
     } else {
       image.removeAttribute('src');
       image.style.display = 'none';
+      snapshotUnavailable.hidden = false;
+      snapshotUnavailable.querySelector('strong').textContent = 'No snapshot recorded';
+      snapshotUnavailable.querySelector('span').textContent = 'This observation does not have an attached image.';
     }
     const gallery = document.getElementById('evidenceGallery');
     gallery.replaceChildren();
@@ -745,11 +1033,12 @@ HTML = r"""
       if (Number.isFinite(Number(item.media_time_seconds))) {
         addText(button, 'span', '', `Video ${Number(item.media_time_seconds).toFixed(1)}s`);
       }
-      addText(button, 'span', '', `${Math.round(Number(item.confidence || 0) * 100)}% · Track #${item.track_id ?? '—'}`);
+      addText(button, 'span', '', `${Math.round(Number(item.confidence || 0) * 100)}% score · Track #${item.track_id ?? '—'}`);
       button.addEventListener('click', () => {
         image.src = thumbnail.src;
         image.alt = thumbnail.alt;
         image.style.display = 'block';
+        snapshotUnavailable.hidden = true;
         gallery.querySelectorAll('.evidence-item').forEach(element => element.classList.remove('selected'));
         button.classList.add('selected');
       });
@@ -759,7 +1048,7 @@ HTML = r"""
     grid.replaceChildren();
     for (const [label, value] of [
       ['Timestamp', alert.timestamp], ['Event class', alert.class], ['Direction', alert.direction],
-      ['Confidence', Number.isFinite(Number(alert.confidence)) ? `${Math.round(Number(alert.confidence) * 100)}%` : 'Not recorded'],
+      ['Detector model score · not a probability', Number.isFinite(Number(alert.confidence)) ? `${Math.round(Number(alert.confidence) * 100)}%` : 'Not recorded'],
       ['Lighting', alert.night ? 'Low light' : 'Daylight'], ['Summary source', alert.summary_source || 'Legacy record'],
       ['Video source', alert.source || 'Not recorded'],
       ['Video time', Number.isFinite(Number(alert.media_time_seconds)) ? `${Number(alert.media_time_seconds).toFixed(3)} seconds` : 'Not recorded'],
@@ -773,7 +1062,9 @@ HTML = r"""
       grid.appendChild(cell);
     }
     modal.classList.add('open');
-    document.getElementById('modalClose').focus();
+    setTimeout(() => {
+      if (modal.classList.contains('open')) document.getElementById('modalClose').focus();
+    }, 25);
   }
 
   function closeIncident() {
@@ -867,7 +1158,28 @@ HTML = r"""
   document.getElementById('resolveBtn').addEventListener('click', () => updateIncidentState(true));
   document.getElementById('modalClose').addEventListener('click', closeIncident);
   document.getElementById('incidentModal').addEventListener('click', event => { if (event.target.id === 'incidentModal') closeIncident(); });
-  document.addEventListener('keydown', event => { if (event.key === 'Escape' && document.getElementById('incidentModal').classList.contains('open')) closeIncident(); });
+  document.addEventListener('keydown', event => {
+    const modal = document.getElementById('incidentModal');
+    if (!modal.classList.contains('open')) return;
+    if (event.key === 'Escape') {
+      closeIncident();
+      return;
+    }
+    if (event.key !== 'Tab') return;
+    const focusable = [...modal.querySelectorAll('button:not(:disabled), textarea:not(:disabled)')]
+      .filter(element => !element.hidden && element.getClientRects().length > 0);
+    if (!focusable.length) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    const focusIsOutsideDialog = !modal.contains(document.activeElement);
+    if (event.shiftKey && (document.activeElement === first || focusIsOutsideDialog)) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && (document.activeElement === last || focusIsOutsideDialog)) {
+      event.preventDefault();
+      first.focus();
+    }
+  });
   pollAlerts();
   refreshHealth();
   setInterval(pollAlerts, 5000);
