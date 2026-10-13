@@ -107,6 +107,40 @@ class EvaluateEventsTests(unittest.TestCase):
         self.assertEqual(exit_code, 2)
         self.assertEqual(input_contents, "{}\n")
 
+    def test_empty_ground_truth_requires_explicit_negative_clip_flag(self):
+        with tempfile.TemporaryDirectory() as root:
+            labels_path = os.path.join(root, "labels.csv")
+            events_path = os.path.join(root, "events.jsonl")
+            report_path = os.path.join(root, "report.json")
+            with open(labels_path, "w", newline="", encoding="utf-8") as file:
+                csv.writer(file).writerow(["video", "event_type", "time_seconds"])
+            with open(events_path, "w", encoding="utf-8") as file:
+                file.write(json.dumps({
+                    "source": "negative.mp4",
+                    "type": "crossing",
+                    "media_time_seconds": 4.0,
+                }) + "\n")
+
+            rejected_exit_code = main([
+                "--labels", labels_path,
+                "--events", events_path,
+            ])
+            exit_code = main([
+                "--labels", labels_path,
+                "--events", events_path,
+                "--allow-empty-labels",
+                "--json-report", report_path,
+            ])
+
+            with open(report_path, encoding="utf-8") as file:
+                report = json.load(file)
+
+        self.assertEqual(rejected_exit_code, 2)
+        self.assertEqual(exit_code, 0)
+        self.assertEqual(report["ground_truth_events"], 0)
+        self.assertEqual(report["overall"]["false_positives"], 1)
+        self.assertEqual(report["by_video"]["negative.mp4"]["false_positives"], 1)
+
     def test_requires_matching_video_type_and_optional_direction(self):
         predictions = [
             {"video": "other.mp4", "event_type": "crossing", "time_seconds": 10.0, "direction": "entering"},

@@ -203,6 +203,11 @@ def main(argv=None):
     parser.add_argument("--events", required=True, help="Detector JSONL event log")
     parser.add_argument("--tolerance", type=float, default=2.0, help="Timestamp matching tolerance in seconds")
     parser.add_argument(
+        "--allow-empty-labels",
+        action="store_true",
+        help="Allow a header-only labels CSV for an intentionally event-free negative test clip.",
+    )
+    parser.add_argument(
         "--json-report",
         help="Optional path to save metrics, input/evaluator SHA-256 digests, matches, false positives, and misses.",
     )
@@ -215,8 +220,11 @@ def main(argv=None):
         }:
             raise ValueError("JSON report path must not overwrite either input file.")
         labels = load_labels(args.labels)
-        if not labels:
-            raise ValueError("The label CSV contains no ground-truth events.")
+        if not labels and not args.allow_empty_labels:
+            raise ValueError(
+                "The label CSV contains no ground-truth events. "
+                "Use --allow-empty-labels only for an intentionally event-free negative test."
+            )
         predictions, unscorable = load_predictions(args.events)
         result = evaluate(labels, predictions, args.tolerance)
         report = {

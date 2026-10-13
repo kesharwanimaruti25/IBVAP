@@ -99,6 +99,15 @@ vid01.mp4,crossing,12.4,entering,Person
 vid01.mp4,loitering,35.0,loitering,Person
 ```
 
+You can create labels interactively instead of editing CSV by hand:
+
+```bash
+python annotate_events.py /path/to/authorized/vid01.mp4 \
+  --output evaluation/run-01/labels.csv
+```
+
+The video opens paused. Use SPACE to play/pause, A/D to seek one second, [/] to step one frame, and 1–4 to record the displayed timestamp as crossing, loitering, suspicious-running, or suspicious-converging. Q saves and exits. The tool records only the label you choose; direction and class remain blank unless you add them after checking the footage. It refuses to overwrite an existing CSV unless `--append` is supplied. For additional clips, append to the same CSV and use `--source-name` if detector records were given a custom `--source-label`. Review every label against the original video before evaluating; this is human annotation, not automatic ground truth.
+
 Use a fresh output directory for each measured detector run so records from earlier runs cannot inflate the false-positive count:
 
 ```bash
@@ -108,11 +117,22 @@ IBVAP_SNAPSHOT_DIR="$PWD/evaluation/run-01/snapshots" \
 python detector.py /path/to/authorized-video.mp4
 ```
 
-After manually labeling that exact clip, save the rows in `evaluation/run-01/labels.csv`, then run:
+After reviewing the labels for that exact clip in `evaluation/run-01/labels.csv`, run:
 
 ```bash
 python evaluate_events.py --labels evaluation/run-01/labels.csv --events evaluation/run-01/events.jsonl --tolerance 2
 ```
+
+For a run containing only a deliberately event-free negative clip, leave the labels CSV header-only and explicitly opt in:
+
+```bash
+python evaluate_events.py \
+  --labels evaluation/run-01/negative-labels.csv \
+  --events evaluation/run-01/events.jsonl \
+  --allow-empty-labels
+```
+
+This reports any detector records in the event log as false positives. The flag is required so an accidentally empty annotation file is not silently treated as a valid negative set.
 
 The evaluator reports one-to-one event-level precision, recall, and F1 overall, per event type, and per video, plus false positives and misses. Optional direction and event-class labels must match; leave them blank to ignore those fields. The tolerance is the allowed difference in video-relative seconds. This is not frame-level accuracy, and it is only meaningful when the labels cover the evaluated clips. Existing historical records without video timing metadata are excluded and counted as unscorable; they are not silently matched using wall-clock timestamps.
 
