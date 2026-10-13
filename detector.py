@@ -28,6 +28,7 @@ face_detector = mp_face.FaceDetection(model_selection=0, min_detection_confidenc
 
 EVENTS_FILE = os.path.expanduser(os.environ.get("IBVAP_EVENTS_FILE", "~/my-ai-app/events.jsonl"))
 SNAPSHOT_DIR = os.path.expanduser(os.environ.get("IBVAP_SNAPSHOT_DIR", "~/my-ai-app/snapshots"))
+DETECTION_DEVICE = os.environ.get("IBVAP_DEVICE", "mps")
 os.makedirs(SNAPSHOT_DIR, exist_ok=True)
 events_directory = os.path.dirname(EVENTS_FILE)
 if events_directory:
@@ -353,7 +354,7 @@ def run_detection(cap, fence_a, fence_b, is_video_file, label="", headless=False
 
         results = model.track(
             frame, classes=TRACK_CLASSES, persist=True, verbose=False,
-            device="mps", conf=0.25, imgsz=960, tracker="my_botsort.yaml"
+            device=DETECTION_DEVICE, conf=0.25, imgsz=960, tracker="my_botsort.yaml"
         )
 
         current_person_positions = []

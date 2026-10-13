@@ -15,7 +15,7 @@
 
 ## Run locally
 
-Use Python 3.9 or later. Install the Python dependencies in a virtual environment:
+The full detector stack has been smoke-tested on macOS arm64 with Python 3.9.6. The lightweight unit-test workflow also runs on Python 3.11, but that does not validate the full computer-vision stack on Python 3.11 or other operating systems. Install the dependencies in a virtual environment:
 
 ```bash
 python3 -m venv .venv
@@ -42,11 +42,13 @@ python app1.py
 
 Open `http://127.0.0.1:5001` for the incident desk. To start live webcam monitoring, run `python detector.py`; the live webcam preview and detector view are mirrored, the fence setup stays on the live feed, and detection starts as soon as the fence is confirmed. For recorded clips, use the authorized video file path; the detector keeps its paused fence-setup and pre-start review screens, without mirroring, for that clip. The assistant is optional and requires the configured local Ollama model.
 
-The YOLO model weights are not included in this repository; Ultralytics downloads `yolov8s.pt` when the detector first runs. Sample videos and captured footage are also excluded—use only video you are authorized to process and publish.
+The YOLO model weights are not included in this repository; Ultralytics downloads `yolov8s.pt` when the detector first runs. BoT-SORT's `lap` dependency is installed directly from `requirements.txt` to avoid an implicit package install at first inference. Sample videos and captured footage are also excluded—use only video you are authorized to process and publish.
 
 `anpr.py` is a separate, experimental webcam prototype and is not connected to the dashboard. To install its additional dependency, run `python -m pip install -r requirements-anpr.txt`.
 
 The detector and dashboard must use the same `IBVAP_EVENTS_FILE` and `IBVAP_SNAPSHOT_DIR` values. If you override either path, export the same values in both terminal windows before starting `python app1.py` and `python detector.py`. The dashboard watches the event log and refreshes its feed every five seconds; detector events are added immediately with a deterministic summary, without waiting for Ollama. The suspicious-convergence rule requires people to approach each other over time, rather than merely stand near each other, and limits repeat alerts for the same tracks.
+
+`IBVAP_DEVICE` selects the Ultralytics inference device. It defaults to `mps` for the tested Apple Silicon setup; use `cpu` on a CPU-only host or a supported CUDA device such as `0` on a configured NVIDIA host. These alternatives are configurable but have not been validated as complete deployment targets.
 
 During interactive detection, click a visible person box to mark or unmark that tracker as friendly for the current detector session. Friendly boxes remain visible with a distinct label, while crossing, loitering, running, and convergence alerts involving that track are suppressed. This is manual, temporary operator control—not uniform or face recognition. Tracker IDs can switch or be reassigned in crowds, so verify the marked box and remove the friendly mark if it no longer follows the intended person. Existing recorded events are not changed.
 
@@ -75,6 +77,7 @@ The defaults match the current workspace layout. Override paths/model without ed
 | Environment variable | Default |
 | --- | --- |
 | `IBVAP_CHAT_MODEL` | `llama3.1:8b` |
+| `IBVAP_DEVICE` | `mps` |
 | `IBVAP_EVENTS_FILE` | `~/my-ai-app/events.jsonl` |
 | `IBVAP_ALERTS_FILE` | `~/my-ai-app/alerts.jsonl` |
 | `IBVAP_SNAPSHOT_DIR` | `~/my-ai-app/snapshots` |
@@ -113,6 +116,8 @@ python evaluate_events.py --labels evaluation/run-01/labels.csv --events evaluat
 
 The evaluator reports one-to-one event-level precision, recall, and F1 overall, per event type, and per video, plus false positives and misses. Optional direction and event-class labels must match; leave them blank to ignore those fields. The tolerance is the allowed difference in video-relative seconds. This is not frame-level accuracy, and it is only meaningful when the labels cover the evaluated clips. Existing historical records without video timing metadata are excluded and counted as unscorable; they are not silently matched using wall-clock timestamps.
 
+For a defensible measurement, manually label every expected event in each selected clip, including clips with no expected events, and review the labels against the video before scoring. Keep threshold/rule tuning clips separate from a held-out set used for the result you present. Do not use detector output as ground truth. Report the number and conditions of the labeled clips together with precision, recall, false positives, and misses; a small or convenient sample is not evidence of field accuracy.
+
 For a reviewable evaluation artifact, add `--json-report`:
 
 ```bash
@@ -126,6 +131,12 @@ python evaluate_events.py \
 The JSON report records the matching method and tolerance, SHA-256 digests of the input label and event files and evaluator, metrics overall/per type/per video, every one-to-one match with its time error, and the unmatched labels and detections. Keep labels authorized, document which clips and camera conditions they cover, and review every miss and false alert. A report makes a run auditable; it does not establish that the selected clips represent real deployments or record all model/hardware configuration.
 
 Run the automated tests with `python -m unittest discover -s tests -v`. A lightweight test-only install is available with `python -m pip install -r requirements-test.txt`; GitHub Actions runs this suite on pushes and pull requests.
+
+## Deployment validation status
+
+The full dependency set has been installed and exercised in a fresh Python 3.9.6 environment on macOS arm64 (Apple M4). The 43 unit tests pass there; headless inference has completed on the available local clips using MPS, and the configurable CPU device has also completed a smoke run on this same computer. The dashboard returned HTTP 200 from that environment, and a generated event and snapshot passed `verify_chain.py`. These are installation and workflow smoke tests only: the clips were not manually labeled, so they do not establish detection accuracy. One packaging caveat remains: `pip 26 check` flags the MediaPipe 0.10.14 wheel's Intel-only internal platform tag on Apple Silicon, although its native extension and the detector's face-detection initialization/inference path ran on the M4; `pip 21.2.4 check` reports no broken requirements. Keep MediaPipe pinned until a replacement retains the legacy `mp.solutions.face_detection` API and is verified on this hardware.
+
+The automated GitHub Actions job installs only `requirements-test.txt` on Python 3.11; it does not validate the full vision stack on Python 3.11. Webcam capture, IP-camera streams, Windows, Linux, CUDA, long-duration operation, concurrent cameras, and production access controls have not been validated. The supported demonstrated scope remains a single local stream on the tested Apple Silicon setup. Before claiming support for another deployment target, run the full install, unit tests, detector smoke test, dashboard/evidence check, and integrity verifier on that target.
 
 ## Pitch/demo outline
 
